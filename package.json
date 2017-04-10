@@ -1,0 +1,24 @@
+{
+  "name": "hopster-backend-test",
+  "version": "1.0.0",
+  "description": "Use hopster's tech stack",
+  "main": "main.py",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariot/hopster-backend-test.git"
+  },
+  "keywords": [
+    "hopster",
+    "backend",
+    "test"
+  ],
+  "author": "Mariot Tsitoara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mariot/hopster-backend-test/issues"
+  },
+  "homepage": "https://github.com/mariot/hopster-backend-test#readme"
+}
