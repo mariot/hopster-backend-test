@@ -3,3 +3,8 @@ var myApp = angular.module('myApp', [
   'movieServices',
   'movieControllers'
 ]);
+
+myApp.config(['$interpolateProvider', function($interpolateProvider) {
+  $interpolateProvider.startSymbol('{a');
+  $interpolateProvider.endSymbol('a}');
+}]);

@@ -1,28 +1,27 @@
 angular.module('movieServices', [])
 
 .factory('Movie', function($http) {
-  urlOfSearch = 'data/search.json?';
-  urlOfMovie = 'data/movie.json?';
+  urlOfSearch = 'http://localhost:8080/_ah/api/suggestion/v1/suggestions';
 
   var db_search = new PouchDB('movie_search', {skip_setup: true});
 
   return {
+    allMovies: function() {
+      return $http({
+        method: 'GET',
+        url: urlOfSearch
+      });
+    },
     search: function(keyword) {
       return $http({
         method: 'GET',
-        url: urlOfSearch + keyword
-      });
-    },
-    searchNext: function(url) {
-      return $http({
-        method: 'GET',
-        url: url
+        url: urlOfSearch
       });
     },
     getMovie: function(id) {
       return $http({
         method: 'GET',
-        url: urlOfMovie + id
+        url: urlOfSearch + id
       });
     },
     saveLastData: function(key, data) {
