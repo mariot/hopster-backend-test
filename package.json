@@ -4,7 +4,10 @@
   "description": "Use hopster's tech stack",
   "main": "main.py",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start karma.conf.js",
+    "serve": "dev_appserver.py app.yaml",
+    "deploy": "gcloud app deploy",
+    "run": "gcloud app browse"
   },
   "repository": {
     "type": "git",
@@ -17,6 +20,13 @@
   ],
   "author": "Mariot Tsitoara",
   "license": "ISC",
+  "devDependencies": {
+    "jasmine-core": "^2.5.2",
+    "karma": "^1.5.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.1",
+    "karma-jasmine": "^1.1.0"
+  },
   "bugs": {
     "url": "https://github.com/mariot/hopster-backend-test/issues"
   },
