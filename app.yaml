@@ -12,7 +12,9 @@ handlers:
   static_dir: client/styles
 - url: /libs
   static_dir: client/libs
-- url: .*
+- url: /_ah/spi/.*
+  script: service.api
+- url: /.*
   script: main.app
 
 libraries:
@@ -20,3 +22,7 @@ libraries:
   version: latest
 - name: jinja2
   version: latest
+- name: pycrypto
+  version: 2.6
+- name: endpoints
+  version: 1.0

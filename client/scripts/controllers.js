@@ -1,66 +1,57 @@
 var movieControllers = angular.module('movieControllers', []);
 
-movieControllers.controller('SearchController', function($scope, $timeout, Movie) {
+movieControllers.controller('SearchController', function($scope, $http, $timeout, Movie) {
+  Movie.allMovies().then(function(doc) {
+    if (doc.data.items) {
+      $scope.results = doc.data.items;
+      console.log(doc.data);
+    } else {
+      $scope.results = [];
+    }
+  })
+
   Movie.loadLastData('lastquery').then(function (doc) {
     $scope.query = doc.data;
+    $timeout(function () {}, 0);
   }).catch(function (err) {
     $scope.query = '';
     console.log(err);
   });
 
-  Movie.loadLastData('lastresults').then(function (doc) {
-    $scope.results = doc.data.movies.items;
-
-    $scope.resultData = doc.data;
-    $scope.loadButton = showLoadButton();
-
-    $timeout(function () {}, 0);
-  }).catch(function (err) {
-    console.log(err);
-  });
-
   $scope.search = function(keyword) {
-    Movie.search(keyword).then(function (doc) {
-      $scope.results = doc.data.movies.items;
+    Movie.saveLastData('lastquery', keyword);
+  };
 
-      $scope.resultData = doc.data;
-      $scope.loadButton = showLoadButton();
+  $scope.sendSuggestion = function () {
+    var data = {
+        title: $scope.title,
+        plot: $scope.plot
+    };
+    console.log(data);
 
-      Movie.saveLastData('lastquery', keyword);
-      Movie.saveLastData('lastresults', doc.data);
+    var config = {
+        headers : {
+            'Content-Type': 'application/json'
+        }
+    }
 
-    }).catch(function (err) {
-      console.log(err);
+    $http.post('http://localhost:8080/_ah/api/suggestion/v1/suggestion',
+     data, config)
+    .then(function (data, status, headers, config) {
+        console.log(data);
+        $scope.message = 'Success!';
+    })
+    .catch(function (data, status, header, config) {
+        $scope.message = 'Something went wrong...'
+        console.log(status);
+        console.log(data);
     });
-  }
-
-  $scope.loadMoreData = function() {
-    if ($scope.resultData.movies.next) {
-      Movie.searchNext($scope.resultData.movies.next).then(function (doc) {
-        $scope.resultData.movies.items = $scope.resultData.movies.items
-          .concat(doc.data.movies.items);
-        $scope.results = $scope.results.concat(doc.data.movies.items);
-      }).catch(function (err) {
-        console.log(err);
-      });
-    }
-
-    $scope.loadButton = showLoadButton();
-
-    Movie.saveLastData('lastresults', $scope.resultData);
-  }
-
-  function showLoadButton() {
-    if ($scope.resultData.movies.next) {
-      return true;
-    }
-    return false;
-  }
+  };
 });
 
 movieControllers.controller('MovieDetailsController', function($scope, $routeParams, Movie) {
-  Movie.getArtist($routeParams.movieId).then(function (doc) {
-    $scope.artist = doc.data;
+  Movie.getMovie($routeParams.movieId).then(function (doc) {
+    $scope.movie = doc.data;
   }).catch(function (err) {
     console.log(err);
   });
