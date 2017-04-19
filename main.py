@@ -5,6 +5,8 @@ import webapp2
 
 from google.appengine.api import users
 
+from jwt import JWT
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -46,11 +48,13 @@ class AddSuggestion(webapp2.RequestHandler):
             username = user.nickname()
             log_url = users.create_logout_url(self.request.uri)
             log_url_linktext = 'Sign out'
+            token = JWT.create_token(user.email(), "insert")
             template_values = {
                 'user': user,
                 'username': username,
                 'log_url': log_url,
                 'log_url_linktext': log_url_linktext,
+                'token': token,
             }
 
             self.response.write(template.render(template_values))

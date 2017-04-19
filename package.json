@@ -30,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/mariot/hopster-backend-test/issues"
   },
-  "homepage": "https://github.com/mariot/hopster-backend-test#readme"
+  "homepage": "https://github.com/mariot/hopster-backend-test#readme",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
 }

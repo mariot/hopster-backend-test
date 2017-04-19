@@ -22,12 +22,11 @@ movieControllers.controller('SearchController', function($scope, $http, $timeout
     Movie.saveLastData('lastquery', keyword);
   };
 
-  $scope.sendSuggestion = function () {
+  $scope.sendSuggestion = function (received_token) {
     var data = {
         title: $scope.title,
         plot: $scope.plot
     };
-    console.log(data);
 
     var config = {
         headers : {
@@ -35,15 +34,15 @@ movieControllers.controller('SearchController', function($scope, $http, $timeout
         }
     }
 
-    $http.post('http://localhost:8080/_ah/api/suggestion/v1/suggestion',
+    $http.defaults.headers.common['Authorization'] = "Bearer " + received_token;
+    $http.post('https://hopster-backend-test.appspot.com/_ah/api/suggestion/v1/suggestion',
      data, config)
     .then(function (data, status, headers, config) {
         console.log(data);
         $scope.message = 'Success!';
     })
     .catch(function (data, status, header, config) {
-        $scope.message = 'Something went wrong...'
-        console.log(status);
+        $scope.message = 'Something went wrong...';
         console.log(data);
     });
   };
