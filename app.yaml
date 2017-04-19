@@ -12,7 +12,7 @@ handlers:
   static_dir: client/styles
 - url: /libs
   static_dir: client/libs
-- url: /_ah/spi/.*
+- url: /_ah/api/.*
   script: service.api
 - url: /.*
   script: main.app
@@ -24,5 +24,9 @@ libraries:
   version: latest
 - name: pycrypto
   version: 2.6
-- name: endpoints
-  version: 1.0
+- name: ssl
+  version: 2.7.11
+
+env_variables:
+  ENDPOINTS_SERVICE_NAME: suggestion-api.endpoints.hopster-backend-test.cloud.goog
+  ENDPOINTS_SERVICE_VERSION: 2017-04-26r0

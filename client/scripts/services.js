@@ -1,7 +1,7 @@
 angular.module('movieServices', [])
 
 .factory('Movie', function($http) {
-  urlOfSearch = 'http://localhost:8080/_ah/api/suggestion/v1/suggestions';
+  urlOfSearch = 'https://hopster-backend-test.appspot.com/_ah/api/suggestion/v1/suggestions?fields=items';
 
   var db_search = new PouchDB('movie_search', {skip_setup: true});
 
