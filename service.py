@@ -2,6 +2,7 @@ import endpoints
 from google.appengine.ext import ndb
 from google.appengine.api import users
 from protorpc import messages, message_types, remote
+from decorator import need_auth
 
 
 class Suggestion(messages.Message):
@@ -23,7 +24,7 @@ class SuggestionModel(ndb.Model):
 
 
 @endpoints.api(name='suggestion',
-               description="API for storing and accessing movie infos",
+               description="API for storing and accessing movie suggestions",
                version='v1')
 class SuggestionAPI(remote.Service):
     @endpoints.method(Suggestion, Suggestion, name="suggestion.insert",
@@ -31,9 +32,12 @@ class SuggestionAPI(remote.Service):
                       http_method='POST')
     def insert_suggestion(self, request):
         user = users.get_current_user()
-        SuggestionModel(author=user,
-                        title=request.title,
-                        plot=request.plot).put()
+        basic_auth = self.request_state.headers.get('authorization')
+
+        @need_auth(basic_auth, 'insert')
+        def create_suggestion(author, title, plot):
+            return SuggestionModel(author=author, title=title, plot=plot)
+        create_suggestion(user, request.title, request.plot).put()
         return request
 
     @endpoints.method(message_types.VoidMessage, SuggestionList,
@@ -43,7 +47,11 @@ class SuggestionAPI(remote.Service):
     def list_suggestions(self, unused_request):
         suggestions = []
         for sugg in SuggestionModel.query():
-            suggestions.append(Suggestion(author=sugg.author.nickname(),
+            if sugg.author:
+                author = sugg.author.nickname()
+            else:
+                author = 'Anonymous'
+            suggestions.append(Suggestion(author=author,
                                           title=sugg.title,
                                           plot=sugg.plot))
         return SuggestionList(items=suggestions)

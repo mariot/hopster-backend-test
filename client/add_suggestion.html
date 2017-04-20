@@ -11,6 +11,10 @@
     <script src="libs/angular.min.js"></script>
     <script src="libs/angular-route.min.js"></script>
     <script src="libs/pouchdb.min.js"></script>
+    <script src="libs/crypto-js.js"></script>
+    <script src="libs/aes.js"></script>
+    <script src="libs/hmac-sha256.js"></script>
+    <script src="libs/enc-base64.js"></script>
     <script src="scripts/app.js"></script>
     <script src="scripts/services.js"></script>
     <script src="scripts/controllers.js"></script>
@@ -72,7 +76,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button ng-click="sendSuggestion()"
+            <button ng-click='sendSuggestion("{{token}}")'
              class="btn btn-default">Add</button>
             <p>{a message a}</p>
           </div>
